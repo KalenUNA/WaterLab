@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="导入你的 3D 模型，倒水、转动，观察水的流动。浏览器本地水实验测试版。" />
+  <meta name="theme-color" content="#191919" />
+  <title>Water Lab · 水实验</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23232323'/%3E%3Cpath d='M16 5C13 10 8 15 8 20a8 8 0 0016 0c0-5-5-10-8-15z' fill='%23b8b8b8'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js","three/addons/":"./vendor/three/addons/","three-mesh-bvh":"./vendor/bvh/index.js"}}</script>
+</head>
+<body>
+  <main id="app">
+    <div id="viewport" aria-label="3D 水实验区域" tabindex="0"></div>
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">≈</span><div><strong>Water Lab<span class="brand-divider">/</span><span class="brand-zh">水实验</span></strong><span class="eyebrow">A STUDY OF WATER &amp; FORM</span></div></div>
+      <div class="top-actions"><span class="version">本地测试版 <span>0.5</span></span><button id="language" class="button language-button" aria-label="Switch to English">EN</button><button id="import" class="button import-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-4 4 4-4 4 4M4 15v5h16v-5"/></svg>导入模型</button></div>
+      <input type="file" id="file-input" accept=".glb,.gltf,.obj,.mtl,.stl,.ply,.bin,.png,.jpg,.jpeg,.webp,.bmp,.gif,.ktx2" multiple hidden />
+    <input type="file" id="folder-input" webkitdirectory multiple hidden />
+    </header>
+
+    <aside class="panel model-panel" aria-label="模型选择">
+      <div class="panel-heading"><span class="section-index">01</span><h2>实验对象</h2></div>
+      <div class="model-picker" role="group" aria-label="内置模型">
+        <button class="model-card selected" data-model="vessel" aria-pressed="true"><svg viewBox="0 0 64 48" aria-hidden="true"><ellipse cx="32" cy="12" rx="20" ry="7"/><path d="M12 12v22c0 10 40 10 40 0V12M17 16v16"/></svg><span>容器</span></button>
+        <button class="model-card" data-model="room" aria-pressed="false"><svg viewBox="0 0 64 48" aria-hidden="true"><path d="M9 32V13L32 3l23 10v19L32 44zM9 32l23-10 23 10M32 3v19M21 28v-8l10-4 10 4v8"/></svg><span>房间</span></button>
+      </div>
+      <div class="model-info"><strong id="model-name">陶瓷容器</strong><span id="model-description">开放杯口 · 可接水与倾倒</span></div>
+      <div class="local-note"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 7V5a4 4 0 018 0v2M3 7h10v7H3z"/></svg>模型文件仅在本机读取</div>
+      <button id="import-folder" class="text-button folder-import">导入文件夹</button>
+      <details class="advanced"><summary>导入模型说明</summary><p>支持 GLB、GLTF、OBJ、STL 和 PLY 网格。GLTF 的 BIN、OBJ 的 MTL 和贴图请一起选择，或导入整个文件夹。模型自动居中，按表面挡水；缺口会漏水。</p><p>保留模型材质或顶点颜色。支持 Draco / Meshopt；暂不支持点云、3DGS、KTX2 和动画变形。单模型最大 80 MB，配套文件总计 200 MB / 500 个；建议少于 20 万三角面。</p><p><a href="./models/demo-vessel.glb" download>下载测试容器 GLB</a></p></details>
+    </aside>
+
+    <aside class="panel water-panel" aria-label="水流设置">
+      <div class="panel-heading"><span class="section-index">02</span><h2>水流</h2><span class="live-label" id="water-state">已关闭</span></div>
+      <button id="pour" class="button primary" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-3 5-7 8-7 13a7 7 0 0014 0c0-5-4-8-7-13z"/></svg><span>开始倒水</span><kbd>空格</kbd></button>
+      <label class="range-label" for="flow"><span>流量</span><output id="flow-value">适中</output></label><input id="flow" type="range" min="40" max="260" value="150" step="10" />
+      <label class="range-label" for="height"><span>出水高度</span><output id="height-value">2.4</output></label><input id="height" type="range" min="1.5" max="3.5" value="2.4" step="0.1" />
+      <div class="separator"></div>
+      <label class="select-label" for="quality">水量上限<select id="quality"><option value="1200">轻量</option><option value="2600" selected>标准</option><option value="3800">更多</option></select></label>
+      <label class="select-label surface-label" for="surface">显示方式<select id="surface"><option value="liquid">连续水面</option><option value="particles">粒子对照</option></select></label>
+      <button id="clear" class="text-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5m4-5v5"/></svg>清空水</button>
+    </aside>
+
+    <div class="scene-caption"><span class="caption-line"></span><span id="scene-caption">VESSEL / 001</span></div>
+    <div class="bottom-area">
+      <div id="interaction-hint" class="interaction-hint">拖动模型让水晃动 · 滚轮缩放</div>
+      <nav class="toolbar" aria-label="操作模式">
+        <button data-mode="object" class="tool active" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4v10l-8 4-8-4V7zM4 7l8 4 8-4M12 11v10"/></svg>转动模型</button>
+        <button data-mode="view" class="tool" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>观察视角</button>
+        <button data-mode="nozzle" class="tool" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18m-12-6 3-3 3 3m-6 12 3 3 3-3M6 9l-3 3 3 3m12-6 3 3-3 3"/></svg>移动出水口</button>
+        <span class="toolbar-separator"></span><button id="upright" class="tool" title="模型回正"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 119 11M3 4v6h6"/></svg><span>回正</span></button>
+      </nav>
+    </div>
+    <footer class="statusbar"><span><span class="status-dot"></span><span id="status">准备就绪</span></span><span><span id="particle-count">0</span> 水粒子<span class="status-divider">/</span><span id="fps">—</span> FPS</span></footer>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="drop-overlay" class="drop-overlay" hidden><div><span class="drop-symbol">＋</span><strong>把模型放在这里</strong><p>.glb / .gltf / .obj / .stl / .ply</p></div></div>
+    <div id="loading" class="loading"><span class="spinner"></span><strong>准备实验空间…</strong></div>
+    <dialog id="model-choice" aria-labelledby="model-choice-title"><form method="dialog"><h2 id="model-choice-title">选择要导入的模型</h2><p>找到多个模型，请选择一个用于水实验。</p><label for="model-choice-select">模型文件</label><select id="model-choice-select"></select><div class="dialog-actions"><button class="button" value="cancel">取消</button><button class="button" value="import">导入</button></div></form></dialog>
+  </main>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
