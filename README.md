@@ -1,6 +1,5 @@
 # WaterLab
 
-## English
 
 ### About the project
 
@@ -35,7 +34,6 @@ Archive SHA-256: `dea6538a474b95d94426754ef81bfce9bb13b4bd42e92990a118d50531b6b7
 
 ---
 
-## 中文
 
 ### 项目介绍
 
