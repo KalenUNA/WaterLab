@@ -1,7 +1,5 @@
 # WaterLab
 
-## English
-
 ### About the project
 
 WaterLab is a browser-based experiment exploring water, movement, and 3D forms. Import a model, pour water from a movable outlet, and rotate the object to watch water collect, move, and spill. It was developed as an interactive-art coursework prototype with the help of AI coding agents.
@@ -36,8 +34,6 @@ This private repository contains the **0.5 prototype source files**, including t
 Archive SHA-256: `dea6538a474b95d94426754ef81bfce9bb13b4bd42e92990a118d50531b6b754`
 
 ---
-
-## 中文
 
 ### 项目介绍
 
