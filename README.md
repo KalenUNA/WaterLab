@@ -1,5 +1,6 @@
 # WaterLab
 
+## English
 
 ### About the project
 
@@ -19,8 +20,8 @@ Model files are processed locally in the browser. WaterLab imports existing mesh
 
 ### Download and run
 
-1. Download [WaterLab-v05.zip](./WaterLab-v05.zip).
-2. Extract it and open the `WaterLab` folder.
+1. Download this repository using **Code → Download ZIP**, or clone it.
+2. Extract the download and open the project folder containing `server.mjs`.
 3. With Node.js installed, double-click `Start Water Lab.cmd` on Windows. Alternatively, run `node server.mjs` from the project folder.
 4. Open [http://127.0.0.1:4174/](http://127.0.0.1:4174/) in your browser.
 
@@ -28,12 +29,15 @@ Dependencies are bundled locally; no npm installation is required. Start the loc
 
 ### Repository contents
 
-This private repository stores the complete **0.5 prototype as a ZIP archive**. Its 68 files include source code, models, bundled dependencies and licenses, test fixtures, and 21 automated checks. The original folder structure is preserved inside the archive; source files are not yet expanded into repository folders. The webpage has not been publicly deployed.
+This private repository contains the **0.5 prototype source files**, including the webpage in `dist/`, bundled dependencies and licenses, models, test fixtures, 21 automated checks in `tests/`, local launch scripts, and technical comparisons. The original directory structure is preserved. The webpage has not been publicly deployed.
+
+[WaterLab-v05.zip](./WaterLab-v05.zip) is retained as an earlier complete project snapshot; use the repository files for the current version.
 
 Archive SHA-256: `dea6538a474b95d94426754ef81bfce9bb13b4bd42e92990a118d50531b6b754`
 
 ---
 
+## 中文
 
 ### 项目介绍
 
@@ -53,8 +57,8 @@ WaterLab（水实验）是一个在浏览器中探索水、运动与三维形态
 
 ### 下载与运行
 
-1. 下载 [WaterLab-v05.zip](./WaterLab-v05.zip)。
-2. 解压后打开 `WaterLab` 文件夹。
+1. 点击仓库的 **Code → Download ZIP** 下载全部文件，或克隆仓库。
+2. 解压后打开包含 `server.mjs` 的项目文件夹。
 3. 安装 Node.js 后，在 Windows 中双击 `Start Water Lab.cmd`；也可以在项目文件夹运行 `node server.mjs`。
 4. 在浏览器打开 [http://127.0.0.1:4174/](http://127.0.0.1:4174/)。
 
@@ -62,6 +66,8 @@ WaterLab（水实验）是一个在浏览器中探索水、运动与三维形态
 
 ### 仓库内容
 
-这个私有仓库以 **ZIP 压缩包保存完整的 0.5 测试版**。包内包含 68 个文件，包括源码、模型、本地依赖及许可、测试数据和 21 项自动检查。压缩包保留原有目录结构，源码尚未展开为仓库文件夹。网页目前没有公开部署。
+这个私有仓库直接保存 **0.5 测试版的源码文件**，包括 `dist/` 中的网页、本地依赖及许可、模型、测试数据、`tests/` 中的 21 项自动检查、本地启动脚本和技术比较。原有目录结构完整保留，网页目前没有公开部署。
+
+仓库中的 [WaterLab-v05.zip](./WaterLab-v05.zip) 保留为较早的完整项目快照；使用当前版本时，请下载仓库中的源码文件。
 
 压缩包 SHA-256：`dea6538a474b95d94426754ef81bfce9bb13b4bd42e92990a118d50531b6b754`
